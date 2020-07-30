@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './screens/meal_detail_screen.dart';
 import 'screens/category_meals_screen.dart';
 import 'screens/categories_screen.dart';
 
@@ -30,7 +31,23 @@ class MyApp extends StatelessWidget {
       ),
       home: CategoriesScreen(),
       routes: {
-       CategoryMealsScreen.routeName: (ctx) => CategoryMealsScreen()
+       CategoryMealsScreen.routeName: (ctx) => CategoryMealsScreen(),
+       MealDetailScreen.routeName: (ctx) => MealDetailScreen()
+      },
+      // * on generate route is used if you have dynamic routes and you dont know what routes will be present
+      // * used as fallback
+      // onGenerateRoute: (settings) {
+      //   if(settings.name == "/meal-payment"){
+      //     return some page acc to need
+      //   }
+      //   if(settings.name == "/some other route"){
+      //     return some page acc to need
+      //   }
+      // },
+      // * if a route is not registered
+      // * last resort
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(builder: (ctx) => CategoryMealsScreen());
       },
     );
   }

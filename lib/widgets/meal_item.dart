@@ -1,9 +1,9 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
+import 'package:food_finder/screens/meal_detail_screen.dart';
 import '../models/meal.dart';
 
 class MealItem extends StatelessWidget {
+  final String id;
   final String title;
   final String imageUrl;
   final Affordability affordability;
@@ -11,13 +11,16 @@ class MealItem extends StatelessWidget {
   final int duration;
 
   MealItem(
-      {@required this.title,
+      {@required this.id,
+      @required this.title,
       @required this.imageUrl,
       @required this.duration,
       @required this.affordability,
       @required this.complexity});
 
-  void _selectMeal() {}
+  void _selectMeal(BuildContext context) {
+    Navigator.of(context).pushNamed(MealDetailScreen.routeName, arguments: id);
+  }
 
   String get affordabilityText {
     switch (affordability) {
@@ -31,7 +34,7 @@ class MealItem extends StatelessWidget {
         return "luxurious";
         break;
       default:
-      return "";
+        return "";
     }
   }
 
@@ -47,14 +50,14 @@ class MealItem extends StatelessWidget {
         return "hard";
         break;
       default:
-      return "";
+        return "";
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: _selectMeal,
+      onTap: () => _selectMeal(context),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         elevation: 4,
@@ -90,7 +93,6 @@ class MealItem extends StatelessWidget {
               ),
             ],
           ),
-          
           Padding(
             padding: const EdgeInsets.all(20),
             child: Row(
@@ -99,21 +101,27 @@ class MealItem extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     Icon(Icons.schedule),
-                    SizedBox(width: 6,),
+                    SizedBox(
+                      width: 6,
+                    ),
                     Text('$duration min'),
                   ],
                 ),
                 Row(
                   children: <Widget>[
                     Icon(Icons.work),
-                    SizedBox(width: 6,),
+                    SizedBox(
+                      width: 6,
+                    ),
                     Text(complexityText),
                   ],
                 ),
                 Row(
                   children: <Widget>[
                     Icon(Icons.attach_money),
-                    SizedBox(width: 6,),
+                    SizedBox(
+                      width: 6,
+                    ),
                     Text(affordabilityText),
                   ],
                 )
