@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/main_drawer.dart';
 import './categories_screen.dart';
 import './favourites_screen.dart';
 
@@ -24,6 +25,7 @@ class _TabsScreenState extends State<TabsScreen> {
   Widget build(BuildContext context) {
     return  Scaffold(
         appBar: AppBar(title: Text(_screens[_selctedScreenIndex]['title'])),
+        drawer: MainDrawer(),
         body: _screens[_selctedScreenIndex]['page'],
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Theme.of(context).primaryColor,
