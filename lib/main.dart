@@ -22,7 +22,25 @@ class _MyAppState extends State<MyApp> {
   };
 
   List<Meal> _availableMeals = DUMMY_MEALS;
+  List<Meal> _favouriteMeals = [];
 
+  bool _isFavourite (String mealId) {
+    return _favouriteMeals.any((meal) => meal.id == mealId);
+  }
+
+  void _toggleFavourite(String mealId){
+    int index  = _favouriteMeals.indexWhere((meal) => meal.id == mealId);
+    if(index >= 0){
+      setState(() {
+        _favouriteMeals.removeAt(index);
+      });
+    }else {
+      setState(() {
+        final meal = DUMMY_MEALS.firstWhere((meal) => meal.id == mealId);
+        _favouriteMeals.add(meal);
+      });
+    }
+  }
 
   void _setFilters(Map<String, bool> filters) {
     setState(() {
@@ -72,10 +90,10 @@ class _MyAppState extends State<MyApp> {
       ),
 //      home: CategoriesScreen(),
       routes: {
-        '/': (ctx) => TabsScreen(),
+        '/': (ctx) => TabsScreen(_favouriteMeals),
         CategoryMealsScreen.routeName: (ctx) =>
             CategoryMealsScreen(_availableMeals),
-        MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
+        MealDetailScreen.routeName: (ctx) => MealDetailScreen(isFavourite: _isFavourite,toggleFavourite: this._toggleFavourite,),
         FiltersScreen.routeName: (ctx) => FiltersScreen(_setFilters, _filters)
       },
       // * on generate route is used if you have dynamic routes and you dont know what routes will be present

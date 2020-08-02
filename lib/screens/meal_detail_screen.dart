@@ -3,12 +3,18 @@ import '../data/dummy_data.dart';
 
 class MealDetailScreen extends StatelessWidget {
   static const routeName = "/meal-detail";
+  final Function isFavourite;
+  final Function toggleFavourite;
+
+  MealDetailScreen({this.isFavourite, this.toggleFavourite});
+
   Widget buildSectionTitle(BuildContext context, String text) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Text(
         text,
-        style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.black),
+        style:
+            Theme.of(context).textTheme.headline6.copyWith(color: Colors.black),
       ),
     );
   }
@@ -60,10 +66,9 @@ class MealDetailScreen extends StatelessWidget {
               buildSectionTitle(context, "Steps"),
               buildContainer(ListView.builder(
                 itemBuilder: (ctx, index) => Column(children: <Widget>[
-
                   ListTile(
                     leading: CircleAvatar(
-                      child: Text("# ${index+ 1}"),
+                      child: Text("# ${index + 1}"),
                     ),
                     title: Text(selectedMeal.steps[index]),
                   ),
@@ -74,6 +79,11 @@ class MealDetailScreen extends StatelessWidget {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(onPressed: (){ Navigator.of(context).pop(mealId);},child: Icon(Icons.delete),));
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            toggleFavourite(mealId);
+          },
+          child: Icon(!isFavourite(mealId)? Icons.star_border: Icons.star),
+        ));
   }
 }
