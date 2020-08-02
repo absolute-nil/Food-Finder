@@ -4,16 +4,20 @@ import 'package:flutter/material.dart';
 import '../screens/filters_screen.dart';
 
 class MainDrawer extends StatelessWidget {
-
-  Widget buildListTile(String title, IconData icon, Function handleTap){
+  Widget buildListTile(String title, IconData icon, Function handleTap) {
     return ListTile(
       onTap: handleTap,
-      leading: Icon(icon, size: 26,),
-      title: Text(title, style: TextStyle(
-          fontFamily: 'RobotoCondensed',
-          fontSize: 24,
-          fontWeight: FontWeight.bold
-      ),),
+      leading: Icon(
+        icon,
+        size: 26,
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+            fontFamily: 'RobotoCondensed',
+            fontSize: 24,
+            fontWeight: FontWeight.bold),
+      ),
     );
   }
 
@@ -28,13 +32,20 @@ class MainDrawer extends StatelessWidget {
             padding: EdgeInsets.all(30),
             color: Theme.of(context).accentColor,
             child: Text("Food's Bae",
-                style: TextStyle(color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.w900, fontSize: 30)),
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 30)),
           ),
-          SizedBox(height: 20,),
-          buildListTile("Meals", Icons.restaurant, (){ Navigator.of(context).pushNamed("/");}),
-          buildListTile("Preferences", Icons.settings, (){ Navigator.of(context).pushNamed(FiltersScreen.routeName);})
-
+          SizedBox(
+            height: 20,
+          ),
+          buildListTile("Meals", Icons.restaurant, () {
+            Navigator.of(context).pushReplacementNamed("/");
+          }),
+          buildListTile("Preferences", Icons.settings, () {
+            Navigator.of(context).pushReplacementNamed(FiltersScreen.routeName);
+          })
         ],
       ),
     );

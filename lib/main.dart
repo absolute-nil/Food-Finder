@@ -1,13 +1,53 @@
 import 'package:flutter/material.dart';
+import './data/dummy_data.dart';
 import './screens/filters_screen.dart';
 import './screens/tabs_screen.dart';
 import './screens/meal_detail_screen.dart';
 import 'screens/category_meals_screen.dart';
-import 'screens/categories_screen.dart';
+import './models/meal.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Map<String, bool> _filters = {
+    'gluten-free': false,
+    'vegetarian': false,
+    'vegan': false,
+    'lactose-free': false
+  };
+
+  List<Meal> _availableMeals = DUMMY_MEALS;
+
+
+  void _setFilters(Map<String, bool> filters) {
+    setState(() {
+      _filters = filters;
+    });
+
+    setState(() {
+      _availableMeals = DUMMY_MEALS.where((meal) {
+        if (_filters['gluten-free'] && !meal.isGlutenFree) {
+          return false;
+        }
+        if (_filters['vegetarian'] && !meal.isVegetarian) {
+          return false;
+        }
+        if (_filters['vegan'] && !meal.isVegan) {
+          return false;
+        }
+        if (_filters['lactose-free'] && !meal.isLactoseFree) {
+          return false;
+        }
+        return true;
+      }).toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -25,18 +65,18 @@ class MyApp extends StatelessWidget {
               color: Color.fromRGBO(20, 51, 51, 1),
             ),
             headline6: TextStyle(
-              fontSize: 20,
-              fontFamily: 'RobotoCondensed',
-              fontWeight: FontWeight.bold,
-              color: Colors.white
-            )),
+                fontSize: 20,
+                fontFamily: 'RobotoCondensed',
+                fontWeight: FontWeight.bold,
+                color: Colors.white)),
       ),
 //      home: CategoriesScreen(),
       routes: {
         '/': (ctx) => TabsScreen(),
-       CategoryMealsScreen.routeName: (ctx) => CategoryMealsScreen(),
-       MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
-        FiltersScreen.routeName: (ctx) => FiltersScreen()
+        CategoryMealsScreen.routeName: (ctx) =>
+            CategoryMealsScreen(_availableMeals),
+        MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
+        FiltersScreen.routeName: (ctx) => FiltersScreen(_setFilters, _filters)
       },
       // * on generate route is used if you have dynamic routes and you dont know what routes will be present
       // * used as fallback
@@ -51,7 +91,8 @@ class MyApp extends StatelessWidget {
       // * if a route is not registered
       // * last resort
       onUnknownRoute: (settings) {
-        return MaterialPageRoute(builder: (ctx) => CategoryMealsScreen());
+        return MaterialPageRoute(
+            builder: (ctx) => CategoryMealsScreen(_availableMeals));
       },
     );
   }
